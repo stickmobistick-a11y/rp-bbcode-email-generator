@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RP Email Generator</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: rgba(30, 41, 59, 0.75);
+      --panel-2: #111827;
+      --text: #f8fafc;
+      --input: rgba(51, 65, 85, 0.8);
+      --border: rgba(255,255,255,0.08);
+      --primary: #3b82f6;
+      --danger: #dc2626;
+    }
+
+    body.light {
+      --bg: #e2e8f0;
+      --panel: rgba(255,255,255,0.85);
+      --panel-2: #f8fafc;
+      --text: #0f172a;
+      --input: rgba(226,232,240,0.9);
+      --border: rgba(15,23,42,0.08);
+      --primary: #2563eb;
+    }
+
+    * {
+      transition: background 0.25s ease, color 0.25s ease, border 0.25s ease, transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg), #1e293b);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      animation: fadeIn 0.35s ease;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2.2rem;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--input);
+      color: var(--text);
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      transform: scale(1.01);
+      border-color: var(--primary);
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .danger-btn {
+      background: var(--danger);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: var(--panel-2);
+      padding: 18px;
+      border-radius: 18px;
+      overflow-y: auto;
+      max-height: 700px;
+      border: 1px solid var(--border);
+    }
+
+    .small-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .theme-toggle {
+      max-width: 220px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .animated-block {
+      margin-bottom: 15px;
+      padding: 15px;
+      background: var(--panel-2);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      animation: slideIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media(max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>RP BBCode Email Generator</h1>
+
+  <div class="theme-toggle">
+    <button type="button" onclick="setTheme('dark')">Dark</button>
+    <button type="button" onclick="setTheme('light')">Light</button>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h2>Informations</h2>
+
+      <label>From</label>
+      <input type="text" id="from" placeholder="" />
+
+      <div class="small-grid">
+        <div>
+          <label>Date</label>
+          <input type="date" id="date" />
+        </div>
+
+        <div>
+          <label>Priority</label>
+          <select id="priority">
+            <option>Low</option>
+            <option selected>Normal</option>
+            <option>High</option>
+            <option>Critical</option>
+          </select>
+        </div>
+      </div>
+
+      <label>To</label>
+      <input type="text" id="to" placeholder="" />
+
+      <label>CC</label>
+      <input type="text" id="cc" placeholder="" />
+
+      <label>Subject</label>
+      <input type="text" id="subject" placeholder="" />
+
+      <label>Email Body</label>
+      <textarea id="body" placeholder="Write your email here..."></textarea>
+
+      <label>Signature</label>
+      <textarea id="signature" placeholder=""></textarea>
+
+      <div style="margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3>Images</h3>
+          <button type="button" onclick="addImageField()" style="width:auto; padding:8px 14px; margin-top:0;">+</button>
+        </div>
+
+        <div id="imagesContainer"></div>
+      </div>
+
+      <div style="margin-top:25px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3>Spoilers</h3>
+          <button type="button" onclick="addSpoilerField()" style="width:auto; padding:8px 14px; margin-top:0;">+</button>
+        </div>
+
+        <div id="spoilersContainer"></div>
+      </div>
+
+      <button onclick="generateBBCode()">Generate BBCode</button>
+      <button onclick="copyBBCode()">Copy BBCode</button>
+    </div>
+
+    <div class="panel">
+      <h2>Generated BBCode</h2>
+      <pre id="output"></pre>
+    </div>
+  </div>
+
+  <script>
+    function generateBBCode() {
+      const from = document.getElementById('from').value || 'Unknown';
+      const rawDate = document.getElementById('date').value;
+      let date = 'Unknown Date';
+
+      if (rawDate) {
+        const parsedDate = new Date(rawDate);
+        date = parsedDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+      const to = document.getElementById('to').value || 'Unknown Recipient';
+      const cc = document.getElementById('cc').value || 'N/A';
+      const subject = document.getElementById('subject').value || 'No Subject';
+      const priority = document.getElementById('priority').value;
+      const body = document.getElementById('body').value;
+      const signature = document.getElementById('signature').value;
+      const imageBlocks = document.querySelectorAll('.image-block');
+      const spoilerBlocks = document.querySelectorAll('.spoiler-block');
+
+      let attachmentCode = '';
+
+      imageBlocks.forEach(block => {
+        const spoilerName = block.querySelector('.image-spoiler-name').value.trim();
+        const imageUrl = block.querySelector('.image-url').value.trim();
+
+        if (imageUrl) {
+          attachmentCode += `
+
+[spoiler=${spoilerName}]
+[img]${imageUrl}[/img]
+[/spoiler]`;
+        }
+      });
+
+      let spoilerCode = '';
+
+      spoilerBlocks.forEach(block => {
+        const spoilerName = block.querySelector('.spoiler-name').value.trim();
+        const spoilerContent = block.querySelector('.spoiler-content').value.trim();
+
+        if (spoilerName || spoilerContent) {
+          spoilerCode += `
+
+[spoiler=${spoilerName}]
+${spoilerContent}
+[/spoiler]`;
+        }
+      });
+
+      const bbcode = `[depmail=${from}|${date}| ${to}| ${cc}| ${subject}|${priority}]
+[justify]
+
+${body}${attachmentCode}${spoilerCode}
+
+[font=times]${signature}[/font]
+[/depmail]`;
+
+      document.getElementById('output').textContent = bbcode;
+    }
+
+    function addImageField() {
+      const container = document.getElementById('imagesContainer');
+
+      const div = document.createElement('div');
+      div.className = 'image-block animated-block';
+      
+
+      div.innerHTML = `
+        <label>Spoiler Name</label>
+        <input type="text" class="image-spoiler-name" placeholder="Crime Scene Photo" />
+
+        <label>Image URL</label>
+        <input type="text" class="image-url" placeholder="https://example.com/image.png" />
+
+        <button type="button" onclick="removeAnimated(this.parentElement)" class="danger-btn" style="margin-top:10px;">- Remove Image</button>
+      `;
+
+      container.appendChild(div);
+    }
+
+    function addSpoilerField() {
+      const container = document.getElementById('spoilersContainer');
+
+      const div = document.createElement('div');
+      div.className = 'spoiler-block animated-block';
+      div.style.marginBottom = '15px';
+      div.style.padding = '15px';
+      div.style.background = '#111827';
+      div.style.borderRadius = '10px';
+
+      div.innerHTML = `
+        <label>Spoiler Name</label>
+        <input type="text" class="spoiler-name" placeholder="Lab Results" />
+
+        <label>Spoiler Content</label>
+        <textarea class="spoiler-content" placeholder="Write spoiler content here..."></textarea>
+
+        <button type="button" onclick="removeAnimated(this.parentElement)" class="danger-btn" style="margin-top:10px;">- Remove Spoiler</button>
+      `;
+
+      container.appendChild(div);
+    }
+
+    function copyBBCode() {
+      const text = document.getElementById('output').textContent;
+
+      if (!text.trim()) {
+        alert('Generate the BBCode first.');
+        return;
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+        alert('BBCode copied to clipboard!');
+      } catch (err) {
+        console.error(err);
+        alert('Failed to copy BBCode.');
+      }
+
+      document.body.removeChild(textarea);
+    }
+
+    function removeAnimated(element) {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(-10px) scale(0.95)';
+
+      setTimeout(() => {
+        element.remove();
+      }, 200);
+    }
+
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.body.classList.add('light');
+      } else {
+        document.body.classList.remove('light');
+      }
+    }
+
+    window.onload = () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+
+      document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+
+      addImageField();
+      addSpoilerField();
+    };
+  </script>
+</body>
+</html>
